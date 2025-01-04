@@ -18,6 +18,9 @@ mongoose.connect(process.env.MONGO_URI,{
 .catch((err)=>{
     console.error('error in connecting to MongoDB', err);
 });
+
+
+//fetch recipe by id API
 app.get('/recipes/:id', async (req, res) => {
     try {
       const recipe = await Recipe.findOne({ Recipe_id: req.params.id }); // Fetch by Recipe_id
@@ -29,6 +32,11 @@ app.get('/recipes/:id', async (req, res) => {
       res.status(500).json({ error: 'Error fetching recipe', details: err });
     }
   });
+
+
+
+
+
 //start server 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
