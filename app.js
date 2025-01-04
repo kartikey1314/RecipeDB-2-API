@@ -5,6 +5,7 @@ dotenv.config();
 const Recipe=require('./src/models/recipe');
 const indexRoutes = require("./src/routes/indexRoutes");
 const verifyApiKey=require("./src/middleware/apikeymiddleware");
+const recipeRoutes = require("./src/routes/recipeRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ mongoose.connect(process.env.MONGO_URI,{
 
 //home Route 
 app.use('/', indexRoutes);
+app.use('/recipe',recipeRoutes);
 
 
 //start server 
