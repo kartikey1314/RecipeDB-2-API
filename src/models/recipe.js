@@ -19,6 +19,7 @@ const recipeSchema = new mongoose.Schema({
   'Energy (kcal)': { type: String, required: true },
   'Protein (g)': { type: String, required: true },
   'Total lipid (fat) (g)': { type: String, required: true },
+  Utensils: { type: String, required: false },
   Processes: { type: String, required: true },
   vegan: { type: String, required: true },
   pescetarian: { type: String, required: true },
