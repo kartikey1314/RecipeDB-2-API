@@ -31,7 +31,8 @@ mongoose.connect(process.env.MONGO_URI,{
 
 //home Route 
 app.use('/', indexRoutes);
-app.use('/recipe',recipeRoutes);
+app.use('/recipe',recipeRoutes);   //recipesinfo for recipes info
+//recipeofday for gettinf recipe of the day.
 
 app.use('/api/recipes', recipeTimeRoutes);
 
