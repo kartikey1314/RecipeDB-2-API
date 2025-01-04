@@ -5,9 +5,12 @@ dotenv.config();
 const Recipe=require('./src/models/recipe');
 const indexRoutes = require("./src/routes/indexRoutes");
 const verifyApiKey=require("./src/middleware/apikeymiddleware");
+const recipeRoutes = require("./src/routes/recipeRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(express.json());
 
 app.use(verifyApiKey);
 
@@ -15,7 +18,7 @@ app.use(verifyApiKey);
 //connecting database 
 mongoose.connect(process.env.MONGO_URI,{
     useNewUrlParser: true,
-    useUnifiedTopology: true,
+   // useUnifiedTopology: true,
 }).then(()=>{
     console.log("Connected to MongoDB");
 })
@@ -23,8 +26,15 @@ mongoose.connect(process.env.MONGO_URI,{
     console.error('error in connecting to MongoDB', err);
 });
 
+
+
 //home Route 
 app.use('/', indexRoutes);
+
+app.use('/api/recipes', recipeRoutes);
+
+
+
 
 
 //start server 
