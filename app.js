@@ -7,7 +7,8 @@ const indexRoutes = require("./src/routes/indexRoutes");
 const verifyApiKey=require("./src/middleware/apikeymiddleware");
 const recipeTimeRoutes = require("./src/routes/recipebytimeRoutes");
 const recipeRoutes = require("./src/routes/recipeRoutes");
-
+const nutritionRoutes = require('./src/routes/nutritionRoutes');
+const micronutrientsRoutes = require('./src/routes/micronutrientsRoutes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -31,11 +32,14 @@ mongoose.connect(process.env.MONGO_URI,{
 
 //home Route 
 app.use('/', indexRoutes);
-app.use('/recipe',recipeRoutes);   //recipesinfo for recipes info
+app.use('/recipe',recipeRoutes);
+app.use('/recipe-nutri',nutritionRoutes)
+app.use('/recipe-micronutri',micronutrientsRoutes);
+
+//app.use('/recipe',recipeRoutes);   //recipesinfo for recipes info
 //recipeofday for gettinf recipe of the day.
 
 app.use('/api/recipes', recipeTimeRoutes);
-
 
 
 
