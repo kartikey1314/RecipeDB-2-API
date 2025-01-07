@@ -42,29 +42,40 @@ exports.getRecipes = async (req, res) => {
   }
 };
 
+const cache = {
+  lastRecipe: null,
+  lastDate: null,
+};
+
 exports.getRecipeOfTheDay = async (req, res) => {
   try {
-    const randomRecipe = await Recipe.aggregate([{ $sample: { size: 1 } }]);
+    const today = new Date().toISOString().split('T')[0]; 
 
-    if (randomRecipe.length === 0) {
-      return res.status(404).json({ success: "false", message: 'No recipe found' });
+    if (cache.lastDate !== today || !cache.lastRecipe) {
+      const randomRecipe = await Recipe.aggregate([{ $sample: { size: 1 } }]);
+
+      if (randomRecipe.length === 0) {
+        return res.status(404).json({ success: "false", message: 'No recipe found' });
+      }
+
+      const recipe = randomRecipe[0];
+      const instructions = await Instruction.findOne({ recipe_id: recipe.Recipe_id });
+
+      cache.lastRecipe = {
+        ...recipe,
+        instructions: instructions ? instructions.steps : 'Instructions not found',
+      };
+      cache.lastDate = today;
     }
-
-    const recipe = randomRecipe[0];
-    const instructions = await Instruction.findOne({ recipe_id: recipe.Recipe_id });
 
     res.status(200).json({
       success: "true",
       message: "Recipe fetched successfully.",
-      payload: {
-        data: {
-          ...recipe,
-          instructions: instructions ? instructions.steps : 'Instructions not found'
-        }
-      }
+      payload: { data: cache.lastRecipe },
     });
   } catch (err) {
     console.error('Error fetching recipe:', err);
     res.status(500).json({ success: "false", message: 'Error fetching recipe', error: err });
   }
 };
+
